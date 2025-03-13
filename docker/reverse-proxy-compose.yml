@@ -1,0 +1,15 @@
+services:
+  reverseproxy:
+    container_name: reverseproxy
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: tk/reverse-proxy:latest
+    ports:
+      - 3001:3001
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
