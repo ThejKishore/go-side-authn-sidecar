@@ -13,8 +13,8 @@ RUN go mod tidy
 # Copy the entire project
 COPY . .
 
-# Build the Go app
-RUN go build -o main .
+# Build the Go app (build the command entrypoint)
+RUN go build -o main ./cmd/reverse-proxy
 
 # Step 2: Final stage (small image)
 FROM alpine:latest

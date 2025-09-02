@@ -255,3 +255,13 @@ func getClaimAsString(claims jwt.MapClaims, key string) string {
 ### Additional Considerations:
 - **Cache Expiration**: Depending on your system requirements, you may want to implement cache expiration or validation mechanisms to ensure that keys are fresh.
 - **Concurrency**: The use of `sync.RWMutex` ensures that multiple requests can read from the cache concurrently without causing race conditions.
+
+```shell
+### building the go program 
+go build -o main ./cmd/reverse-proxy
+
+
+### running the go program 
+
+go run  ./cmd/reverse-proxy/main.go
+```
