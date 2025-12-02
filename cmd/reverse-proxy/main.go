@@ -4,8 +4,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 
+	"reverseProxy/internal/authorization"
 	"reverseProxy/internal/jwtauth"
 	"reverseProxy/internal/proxyhandler"
 )
@@ -17,6 +18,12 @@ func main() {
 	// Fetch the public keys once when the server starts
 	if err := jwtauth.FetchPublicKeys(jwksURL); err != nil {
 		log.Fatalf("Error fetching public keys: %v", err)
+	}
+
+	// Load authorization rules from YAML (authorization.yaml at project root by default)
+	if err := authorization.Load("authorization.yaml"); err != nil {
+		// Not fatal: allow running without external authorization during local dev
+		log.Printf("authorization config not loaded: %v (authorization checks may be skipped)", err)
 	}
 
 	// Start a goroutine to periodically refresh the public keys (optional)

@@ -16,11 +16,15 @@ func b64url(b []byte) string { return base64.RawURLEncoding.EncodeToString(b) }
 func TestParseRSAPublicKey_Valid(t *testing.T) {
 	// generate a key and reconstruct via parseRSAPublicKey inputs
 	priv, err := rsa.GenerateKey(rand.Reader, 1024)
-	if err != nil { t.Fatal(err) }
+	if err != nil {
+		t.Fatal(err)
+	}
 	n := priv.PublicKey.N.Bytes()
 	e := big.NewInt(int64(priv.PublicKey.E)).Bytes()
 	pk, err := parseRSAPublicKey(b64url(n), b64url(e))
-	if err != nil { t.Fatalf("unexpected error: %v", err) }
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	if pk.N.Cmp(priv.PublicKey.N) != 0 || pk.E != priv.PublicKey.E {
 		t.Fatalf("parsed key does not match original")
 	}
@@ -31,7 +35,10 @@ func TestParseRSAPublicKey_InvalidBase64(t *testing.T) {
 		t.Fatalf("expected error for invalid modulus base64")
 	}
 	// valid n, invalid e
-	priv, _ := rsa.GenerateKey(rand.Reader, 512)
+	priv, err := rsa.GenerateKey(rand.Reader, 1024)
+	if err != nil {
+		t.Fatal(err)
+	}
 	if _, err := parseRSAPublicKey(b64url(priv.PublicKey.N.Bytes()), "***"); err == nil {
 		t.Fatalf("expected error for invalid exponent base64")
 	}
@@ -40,7 +47,9 @@ func TestParseRSAPublicKey_InvalidBase64(t *testing.T) {
 func TestFetchPublicKeysAndGet(t *testing.T) {
 	// create an RSA public key and expose as JWKS via httptest server
 	priv, err := rsa.GenerateKey(rand.Reader, 1024)
-	if err != nil { t.Fatal(err) }
+	if err != nil {
+		t.Fatal(err)
+	}
 	// build JWKS
 	jwks := map[string][]map[string]interface{}{
 		"keys": {
