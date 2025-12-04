@@ -1,6 +1,6 @@
 package util
 
-import "github.com/golang-jwt/jwt/v4"
+import "github.com/golang-jwt/jwt/v5"
 
 // GetClaimAsString safely extracts a string claim from jwt.MapClaims
 func GetClaimAsString(claims jwt.MapClaims, key string) string {

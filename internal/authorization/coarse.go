@@ -31,11 +31,13 @@ type validationResponse struct {
 	Reason string `json:"reason,omitempty"`
 }
 
-var httpClient = &http.Client{Timeout: 5 * time.Second}
+var httpClient = &http.Client{
+	Timeout: 5 * time.Second,
+}
 
-// CheckCoarse performs coarse authorization using config.coarse-check from authorization.yaml.
+// CheckCoarseAccess performs coarse authorization using config.coarse-check from authorization.yaml.
 // Returns (allow, reason, error). If section disabled or URL is not set, it returns allow=true.
-func CheckCoarse(req RequestInfo, p jwtauth.Principal) (bool, string, error) {
+func CheckCoarseAccess(req RequestInfo, p jwtauth.Principal) (bool, string, error) {
 	c := ConfigOrNil()
 	if c == nil || !c.Coarse.Enabled || c.Coarse.ValidationURL == "" {
 		return true, "coarse check skipped (no config)", nil
@@ -53,37 +55,48 @@ func CheckCoarse(req RequestInfo, p jwtauth.Principal) (bool, string, error) {
 		Resource:        resource,
 		AnonymousAccess: c.Coarse.AnonymousAccess,
 	}
-	return postValidateCoarse(c.Coarse, payload)
+	return postCoarseCheck(c.Coarse, payload)
 }
 
-func postValidateCoarse(conf CoarseConfig, payload coarsePayload) (bool, string, error) {
-	b, err := json.Marshal(payload)
-	if err != nil {
-		return false, "", err
+func postCoarseCheck(conf CoarseConfig, payload coarsePayload) (bool, string, error) {
+	contentByteArray, marshalErr := json.Marshal(payload)
+
+	if marshalErr != nil {
+		return false, "", marshalErr
 	}
-	req, err := http.NewRequest(http.MethodPost, conf.ValidationURL, bytes.NewReader(b))
-	if err != nil {
-		return false, "", err
+
+	newHttpReq, netWorkErr := http.NewRequest(http.MethodPost, conf.ValidationURL, bytes.NewReader(contentByteArray))
+
+	if netWorkErr != nil {
+		return false, "", marshalErr
 	}
-	req.Header.Set("Content-Type", "application/json")
+
+	newHttpReq.Header.Set("Content-Type", "application/json")
 	// client_secret_basic support
+
 	if conf.ClientAuthMethod == "client_secret_basic" && conf.ClientID != "" {
-		req.SetBasicAuth(conf.ClientID, conf.ClientSecret)
+		newHttpReq.SetBasicAuth(conf.ClientID, conf.ClientSecret)
 	} else if conf.ClientAuthMethod != "" && conf.ClientAuthMethod != "client_secret_basic" {
 		// unsupported method configured
 		return false, "", fmt.Errorf("unsupported client auth method: %s", conf.ClientAuthMethod)
 	}
-	resp, err := httpClient.Do(req)
-	if err != nil {
-		return false, "", err
+	resp, netWorkErr := httpClient.Do(newHttpReq)
+
+	if netWorkErr != nil {
+		return false, "", netWorkErr
 	}
+
 	defer resp.Body.Close()
+
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return false, "non-2xx from validation service", errors.New(resp.Status)
 	}
+
 	var vr validationResponse
+
 	if err := json.NewDecoder(resp.Body).Decode(&vr); err != nil {
 		return false, "", err
 	}
+
 	return vr.Allow, vr.Reason, nil
 }

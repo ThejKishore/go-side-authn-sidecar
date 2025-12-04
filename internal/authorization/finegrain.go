@@ -17,9 +17,9 @@ type finePayload struct {
 	Rule      FineRule          `json:"rule"`
 }
 
-// CheckFineGrain performs fine-grained authorization using config.finegrain-check.
+// CheckFineGrainAccess performs fine-grained authorization using config.finegrain-check.
 // Returns (allow, reason, error). If section disabled or URL is not set, it returns allow=true.
-func CheckFineGrain(req RequestInfo, p jwtauth.Principal) (bool, string, error) {
+func CheckFineGrainAccess(req RequestInfo, p jwtauth.Principal) (bool, string, error) {
 	c := ConfigOrNil()
 	if c == nil || !c.FineGrain.Enabled || c.FineGrain.ValidationURL == "" {
 		return true, "fine-grain check skipped (no config)", nil
@@ -34,15 +34,17 @@ func CheckFineGrain(req RequestInfo, p jwtauth.Principal) (bool, string, error) 
 		Request:   req,
 		Rule:      rule,
 	}
-	return postValidateFine(c.FineGrain, payload)
+	return postFineGrainCheck(c.FineGrain, payload)
 }
 
-func postValidateFine(conf FineGrainConfig, payload finePayload) (bool, string, error) {
-	b, err := json.Marshal(payload)
+func postFineGrainCheck(conf FineGrainConfig, payload finePayload) (bool, string, error) {
+	contentByteArray, err := json.Marshal(payload)
 	if err != nil {
 		return false, "", err
 	}
-	req, err := http.NewRequest(http.MethodPost, conf.ValidationURL, bytes.NewReader(b))
+
+	req, err := http.NewRequest(http.MethodPost, conf.ValidationURL, bytes.NewReader(contentByteArray))
+
 	if err != nil {
 		return false, "", err
 	}
@@ -53,16 +55,22 @@ func postValidateFine(conf FineGrainConfig, payload finePayload) (bool, string, 
 		return false, "", fmt.Errorf("unsupported client auth method: %s", conf.ClientAuthMethod)
 	}
 	resp, err := httpClient.Do(req)
+
 	if err != nil {
 		return false, "", err
 	}
+
 	defer resp.Body.Close()
+
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return false, "non-2xx from validation service", errors.New(resp.Status)
 	}
+
 	var vr validationResponse
+
 	if err := json.NewDecoder(resp.Body).Decode(&vr); err != nil {
 		return false, "", err
 	}
+
 	return vr.Allow, vr.Reason, nil
 }

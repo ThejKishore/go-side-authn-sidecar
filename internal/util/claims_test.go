@@ -1,9 +1,9 @@
 package util
 
 import (
-	"testing"
+    "testing"
 
-	"github.com/golang-jwt/jwt/v4"
+    "github.com/golang-jwt/jwt/v5"
 )
 
 func TestGetClaimAsString(t *testing.T) {

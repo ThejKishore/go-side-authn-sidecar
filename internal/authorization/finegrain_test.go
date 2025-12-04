@@ -14,7 +14,7 @@ func TestCheckFineGrain_SkipWhenNoConfig(t *testing.T) {
 	cfg = nil
 	t.Cleanup(func() { cfg = old })
 
-	allow, reason, err := CheckFineGrain(RequestInfo{Method: "GET", Path: "/x"}, jwtauth.Principal{})
+	allow, reason, err := CheckFineGrainAccess(RequestInfo{Method: "GET", Path: "/x"}, jwtauth.Principal{})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -27,7 +27,7 @@ func TestCheckFineGrain_SkipWhenNoURL(t *testing.T) {
 	old := cfg
 	cfg = &Config{FineGrain: FineGrainConfig{Enabled: true, ValidationURL: ""}}
 	t.Cleanup(func() { cfg = old })
-	allow, reason, err := CheckFineGrain(RequestInfo{}, jwtauth.Principal{})
+	allow, reason, err := CheckFineGrainAccess(RequestInfo{}, jwtauth.Principal{})
 	if err != nil || !allow || reason == "" {
 		t.Fatalf("expected skip allow when URL empty, got allow=%v reason=%q err=%v", allow, reason, err)
 	}
@@ -51,7 +51,7 @@ func TestCheckFineGrain_Allow(t *testing.T) {
 
 	req := RequestInfo{Method: "POST", Path: "/items"}
 	p := jwtauth.Principal{UserID: "u1", Username: "alice", Email: "a@example.com"}
-	allow, reason, err := CheckFineGrain(req, p)
+	allow, reason, err := CheckFineGrainAccess(req, p)
 	if err != nil || !allow || reason != "ok" {
 		t.Fatalf("unexpected result allow=%v reason=%q err=%v", allow, reason, err)
 	}
@@ -70,7 +70,7 @@ func TestCheckFineGrain_Deny(t *testing.T) {
 	cfg = &Config{FineGrain: FineGrainConfig{Enabled: true, ValidationURL: srv.URL, ResourceMap: map[string]FineRule{"[/]": {}}}}
 	t.Cleanup(func() { cfg = old })
 
-	allow, reason, err := CheckFineGrain(RequestInfo{}, jwtauth.Principal{})
+	allow, reason, err := CheckFineGrainAccess(RequestInfo{}, jwtauth.Principal{})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -89,7 +89,7 @@ func TestCheckFineGrain_Non2xx(t *testing.T) {
 	cfg = &Config{FineGrain: FineGrainConfig{Enabled: true, ValidationURL: srv.URL, ResourceMap: map[string]FineRule{"[/]": {}}}}
 	t.Cleanup(func() { cfg = old })
 
-	allow, reason, err := CheckFineGrain(RequestInfo{}, jwtauth.Principal{})
+	allow, reason, err := CheckFineGrainAccess(RequestInfo{}, jwtauth.Principal{})
 	if err == nil || allow || reason == "" {
 		t.Fatalf("expected error, allow=false, and non-empty reason for non-2xx")
 	}
@@ -106,7 +106,7 @@ func TestCheckFineGrain_BadJSON(t *testing.T) {
 	cfg = &Config{FineGrain: FineGrainConfig{Enabled: true, ValidationURL: srv.URL, ResourceMap: map[string]FineRule{"[/]": {}}}}
 	t.Cleanup(func() { cfg = old })
 
-	allow, _, err := CheckFineGrain(RequestInfo{}, jwtauth.Principal{})
+	allow, _, err := CheckFineGrainAccess(RequestInfo{}, jwtauth.Principal{})
 	if err == nil || allow {
 		t.Fatalf("expected decode error and allow=false")
 	}

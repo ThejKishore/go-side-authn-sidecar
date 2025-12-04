@@ -14,7 +14,7 @@ func TestCheckCoarse_SkipWhenNoConfig(t *testing.T) {
 	cfg = nil
 	t.Cleanup(func() { cfg = old })
 
-	allow, reason, err := CheckCoarse(RequestInfo{Method: "GET", Path: "/x"}, jwtauth.Principal{UserID: "u1", Username: "alice", Email: "a@example.com"})
+	allow, reason, err := CheckCoarseAccess(RequestInfo{Method: "GET", Path: "/x"}, jwtauth.Principal{UserID: "u1", Username: "alice", Email: "a@example.com"})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -56,7 +56,7 @@ func TestCheckCoarse_AllowAndPayload(t *testing.T) {
 
 	req := RequestInfo{Method: "GET", Path: "/x"}
 	p := jwtauthPrincipalForTest()
-	allow, reason, err := CheckCoarse(req, p)
+	allow, reason, err := CheckCoarseAccess(req, p)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -84,7 +84,7 @@ func TestCheckCoarse_Deny(t *testing.T) {
 	cfg = &Config{Coarse: CoarseConfig{Enabled: true, ValidationURL: srv.URL, ResourceMap: map[string]string{"[/]": "/res"}}}
 	t.Cleanup(func() { cfg = old })
 
-	allow, reason, err := CheckCoarse(RequestInfo{}, jwtauthPrincipalForTest())
+	allow, reason, err := CheckCoarseAccess(RequestInfo{}, jwtauthPrincipalForTest())
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -103,7 +103,7 @@ func TestCheckCoarse_Non2xx(t *testing.T) {
 	cfg = &Config{Coarse: CoarseConfig{Enabled: true, ValidationURL: srv.URL, ResourceMap: map[string]string{"[/]": "/res"}}}
 	t.Cleanup(func() { cfg = old })
 
-	allow, reason, err := CheckCoarse(RequestInfo{}, jwtauthPrincipalForTest())
+	allow, reason, err := CheckCoarseAccess(RequestInfo{}, jwtauthPrincipalForTest())
 	if err == nil {
 		t.Fatalf("expected error for non-2xx response")
 	}
@@ -126,7 +126,7 @@ func TestCheckCoarse_BadJSON(t *testing.T) {
 	cfg = &Config{Coarse: CoarseConfig{Enabled: true, ValidationURL: srv.URL, ResourceMap: map[string]string{"[/]": "/res"}}}
 	t.Cleanup(func() { cfg = old })
 
-	allow, _, err := CheckCoarse(RequestInfo{}, jwtauthPrincipalForTest())
+	allow, _, err := CheckCoarseAccess(RequestInfo{}, jwtauthPrincipalForTest())
 	if err == nil || allow {
 		t.Fatalf("expected decode error and allow=false")
 	}
