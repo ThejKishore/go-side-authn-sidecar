@@ -1,0 +1,21 @@
+meta {
+  name: reverse-proxy-rest
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3002
+  body: none
+  auth: inherit
+}
+
+headers {
+  X-Backend-Url: https://httpbin.org
+  X-Idp-Type: noIdp
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

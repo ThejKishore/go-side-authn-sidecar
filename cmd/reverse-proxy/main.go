@@ -7,8 +7,11 @@ import (
 	"github.com/gofiber/fiber/v3"
 
 	"reverseProxy/internal/authorization"
+	"reverseProxy/internal/egressconfig"
+	"reverseProxy/internal/egressproxy"
 	"reverseProxy/internal/jwtauth"
 	"reverseProxy/internal/proxyhandler"
+	"reverseProxy/internal/tokenmanager"
 )
 
 func main() {
@@ -40,10 +43,32 @@ func main() {
 		}
 	}()
 
+	go egressProxy()
+
 	app := fiber.New()
 
 	// Reverse proxy handler
 	app.All("/*", proxyhandler.Handler)
 
 	log.Fatal(app.Listen(":3001"))
+}
+
+func egressProxy() {
+	// Load egress configuration from YAML (egress-config.yaml at project root by default)
+	if err := egressconfig.Load("egress-config.yaml"); err != nil {
+		log.Printf("egress config not loaded: %v (egress proxy will operate in noIdp mode only)", err)
+	}
+
+	// Start token refresh manager (10-minute interval)
+	tokenMgr := tokenmanager.GetInstance()
+	if err := tokenMgr.StartTokenRefresh(10 * time.Minute); err != nil {
+		log.Printf("Failed to start token refresh manager: %v", err)
+	}
+
+	app := fiber.New()
+
+	// Egress proxy handler
+	app.All("/*", egressproxy.Handler)
+
+	log.Fatal(app.Listen(":3002"))
 }

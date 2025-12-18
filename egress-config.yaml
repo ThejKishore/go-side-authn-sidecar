@@ -1,0 +1,25 @@
+multi-oauth-client-config:
+#  "ping":
+#    tokenUrl: https://ping.example.com/authorization/token
+#    clientId: your-client-id
+#    clientSecret: your-client-secret
+#    clientCertificate: ""
+#    scope:
+#      - openid
+#
+#  "okta":
+#    tokenUrl: https://okta.example.com/oauth2/v1/token
+#    clientId: your-client-id
+#    clientSecret: your-client-secret
+#    clientCertificate: ""
+#    scope:
+#      - openid
+
+#  "keycloak":
+#    tokenUrl: http://localhost:8080/realms/baeldung-keycloak/protocol/openid-connect/token
+#    clientId: your-client-id
+#    clientSecret: your-client-secret
+#    clientCertificate: ""
+#    scope:
+#      - openid
+
