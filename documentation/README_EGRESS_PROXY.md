@@ -27,11 +27,11 @@ curl http://localhost:3002/api/endpoint \
 
 Start with one of these based on your needs:
 
-- **🎯 [INDEX.md](./INDEX.md)** - Start here for complete overview
-- **⚡ [QUICKSTART.md](./QUICKSTART.md)** - 5-minute setup guide
-- **📚 [EGRESS_PROXY.md](./EGRESS_PROXY.md)** - Complete reference
-- **🔧 [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Technical details
-- **✅ [DELIVERY_SUMMARY.md](./DELIVERY_SUMMARY.md)** - What was delivered
+- **🎯 [INDEX.md](INDEX.md)** - Start here for complete overview
+- **⚡ [QUICKSTART.md](QUICKSTART.md)** - 5-minute setup guide
+- **📚 [EGRESS_PROXY.md](EGRESS_PROXY.md)** - Complete reference
+- **🔧 [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - Technical details
+- **✅ [DELIVERY_SUMMARY.md](DELIVERY_SUMMARY.md)** - What was delivered
 
 ## ✨ What You Get
 
@@ -279,10 +279,10 @@ GET http://localhost:3002/api/users
 
 ## 🎓 Learning Path
 
-1. **Quick Overview**: Read [INDEX.md](./INDEX.md)
-2. **Get Started**: Follow [QUICKSTART.md](./QUICKSTART.md)
-3. **Understand Features**: Read [EGRESS_PROXY.md](./EGRESS_PROXY.md)
-4. **Deep Dive**: Study [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)
+1. **Quick Overview**: Read [INDEX.md](INDEX.md)
+2. **Get Started**: Follow [QUICKSTART.md](QUICKSTART.md)
+3. **Understand Features**: Read [EGRESS_PROXY.md](EGRESS_PROXY.md)
+4. **Deep Dive**: Study [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
 5. **Integration**: Use code examples from documentation
 6. **Testing**: Run test suite to verify
 
@@ -318,8 +318,8 @@ A: Just route egress calls through `localhost:3002` with proper headers
 
 ## 🎯 Next Steps
 
-1. ✅ Read [INDEX.md](./INDEX.md)
-2. ✅ Follow [QUICKSTART.md](./QUICKSTART.md)
+1. ✅ Read [INDEX.md](INDEX.md)
+2. ✅ Follow [QUICKSTART.md](QUICKSTART.md)
 3. ✅ Update `egress-config.yaml` with your OAuth credentials
 4. ✅ Run `go build ./cmd/reverse-proxy`
 5. ✅ Test with provided curl examples

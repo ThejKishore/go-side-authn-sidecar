@@ -5,7 +5,7 @@ Welcome! This document provides an overview of the complete egress proxy sidecar
 ## 📑 Documentation Index
 
 ### Getting Started
-1. **[QUICKSTART.md](./QUICKSTART.md)** ⭐ START HERE
+1. **[QUICKSTART.md](QUICKSTART.md)** ⭐ START HERE
    - Setup and installation
    - Quick configuration
    - Testing examples
@@ -13,14 +13,14 @@ Welcome! This document provides an overview of the complete egress proxy sidecar
    - Troubleshooting
 
 ### Core Documentation
-2. **[EGRESS_PROXY.md](./EGRESS_PROXY.md)**
+2. **[EGRESS_PROXY.md](EGRESS_PROXY.md)**
    - Complete feature overview
    - Configuration reference
    - Usage examples (curl, code)
    - Architecture details
    - Error handling guide
 
-3. **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)**
+3. **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)**
    - Project structure
    - Package details
    - Testing coverage
@@ -28,13 +28,13 @@ Welcome! This document provides an overview of the complete egress proxy sidecar
    - Security considerations
 
 ### Project Information
-4. **[FILES_CREATED.md](./FILES_CREATED.md)**
+4. **[FILES_CREATED.md](FILES_CREATED.md)**
    - Complete file listing
    - Build commands
    - Dependencies
    - Statistics
 
-5. **[COMPLETION_CHECKLIST.md](./COMPLETION_CHECKLIST.md)**
+5. **[COMPLETION_CHECKLIST.md](COMPLETION_CHECKLIST.md)**
    - Requirements verified
    - Implementation status
    - Quality metrics
@@ -348,9 +348,9 @@ A: Yes, they'll be forwarded (except X-Backend-Url, X-Idp-Type)
 
 ## 📞 Support Resources
 
-1. **[QUICKSTART.md](./QUICKSTART.md)** - Getting started
-2. **[EGRESS_PROXY.md](./EGRESS_PROXY.md)** - Complete reference
-3. **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Technical details
+1. **[QUICKSTART.md](QUICKSTART.md)** - Getting started
+2. **[EGRESS_PROXY.md](EGRESS_PROXY.md)** - Complete reference
+3. **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - Technical details
 4. Code examples throughout documentation
 5. Comprehensive test files showing usage patterns
 
@@ -367,7 +367,7 @@ A: Yes, they'll be forwarded (except X-Backend-Url, X-Idp-Type)
 
 ## 🎯 Next Steps
 
-1. ⭐ Read [QUICKSTART.md](./QUICKSTART.md)
+1. ⭐ Read [QUICKSTART.md](QUICKSTART.md)
 2. Update `egress-config.yaml` with your OAuth credentials
 3. Run `go build ./cmd/reverse-proxy`
 4. Test with provided examples

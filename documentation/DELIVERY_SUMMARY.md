@@ -387,9 +387,9 @@ All documentation is self-contained:
 The implementation provides a clean, well-tested, and well-documented solution for OAuth token management and URL rewriting in a microservices architecture.
 
 ### Start Here:
-1. Read [INDEX.md](./INDEX.md)
-2. Follow [QUICKSTART.md](./QUICKSTART.md)
-3. Configure [egress-config.yaml](./egress-config.yaml)
+1. Read [INDEX.md](INDEX.md)
+2. Follow [QUICKSTART.md](QUICKSTART.md)
+3. Configure [egress-config.yaml](../egress-config.yaml)
 4. Run `go build ./cmd/reverse-proxy`
 5. Integrate with your application
 

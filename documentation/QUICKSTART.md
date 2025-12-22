@@ -222,16 +222,17 @@ resp, _ := client.Do(req)
 ## 9. Docker Deployment
 
 ### Dockerfile Example
+
 ```dockerfile
 FROM golang:1.25 as builder
 WORKDIR /app
-COPY . .
+COPY .. .
 RUN go build -o reverse-proxy ./cmd/reverse-proxy
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 COPY --from=builder /app/reverse-proxy /app/
-COPY egress-config.yaml /app/
+COPY ../egress-config.yaml /app/
 WORKDIR /app
 EXPOSE 3001 3002
 CMD ["./reverse-proxy"]

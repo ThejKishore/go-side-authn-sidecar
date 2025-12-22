@@ -584,8 +584,8 @@ Documentation:      ✅ Complete
 
 ## Next Steps for Users
 
-1. **Review** [INDEX.md](./INDEX.md) for overview
-2. **Follow** [QUICKSTART.md](./QUICKSTART.md) for setup
+1. **Review** [INDEX.md](INDEX.md) for overview
+2. **Follow** [QUICKSTART.md](QUICKSTART.md) for setup
 3. **Configure** `egress-config.yaml` with OAuth credentials
 4. **Build** with `go build ./cmd/reverse-proxy`
 5. **Test** with provided curl examples
@@ -652,5 +652,5 @@ The Egress Proxy Sidecar is **fully implemented, thoroughly tested, comprehensiv
 
 For detailed information, please refer to the comprehensive documentation included in this project.
 
-**START HERE**: [INDEX.md](./INDEX.md)
+**START HERE**: [INDEX.md](INDEX.md)
 
