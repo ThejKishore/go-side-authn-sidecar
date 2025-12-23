@@ -2,16 +2,15 @@ package main
 
 import (
 	"log"
+	"reverseProxy/internal/egress/egressconfig"
+	"reverseProxy/internal/egress/egressproxy"
+	"reverseProxy/internal/egress/tokenmanager"
+	"reverseProxy/internal/ingress/authorization"
+	"reverseProxy/internal/ingress/jwtauth"
+	"reverseProxy/internal/ingress/proxyhandler"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
-
-	"reverseProxy/internal/authorization"
-	"reverseProxy/internal/egressconfig"
-	"reverseProxy/internal/egressproxy"
-	"reverseProxy/internal/jwtauth"
-	"reverseProxy/internal/proxyhandler"
-	"reverseProxy/internal/tokenmanager"
 )
 
 func main() {

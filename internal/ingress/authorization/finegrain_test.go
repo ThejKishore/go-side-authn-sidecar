@@ -4,9 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"reverseProxy/internal/ingress/jwtauth"
 	"testing"
-
-	"reverseProxy/internal/jwtauth"
 )
 
 func TestCheckFineGrain_SkipWhenNoConfig(t *testing.T) {

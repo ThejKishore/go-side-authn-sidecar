@@ -5,11 +5,10 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"reverseProxy/internal/egress/tokenstorage"
 	"strings"
 
 	"github.com/gofiber/fiber/v3"
-
-	"reverseProxy/internal/tokenstorage"
 )
 
 // Handler handles egress proxy requests

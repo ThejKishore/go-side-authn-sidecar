@@ -1,0 +1,110 @@
+# PlainId Authorization Configuration Example
+# This file demonstrates how to configure the plainId authorization with various scenarios
+
+finegrain-check:
+  enabled: true
+  validation-url: "http://plainid-service:8080/fga/api/runtime/5.0/decisions/permit-deny"
+  client-id: "your-client-id"
+  client-secret: "your-client-secret"
+  client-auth-method: "client_secret_basic"
+
+  resource-map:
+    # Money Transfer Transaction Authorization
+    "[/mm/web/v1/transaction:POST]":
+      roles: ["ROLE_USER"]
+      ruleset-name: "mm-transaction"
+      ruleset-id: "10201"
+      body:
+        transactionName: $.transactionName
+        transactionAmount: $.transactionAmount
+        # Boolean field - set to true if tranTemplateID is present in request
+        tranTemplateUsed: $.tranTemplateID
+        # Array wildcards - extracts multiple values
+        fromAccountIds: $.fromAccount[*].accountId
+        toAccountIds: $.toAccount[*].accountId
+        fromAccountValues: $.fromAccount[*].accountValue
+
+    # User Login Authorization
+    "[/plt/web/v1/user/login:POST]":
+      roles: ["ROLE_USER"]
+      ruleset-name: "plt-login"
+      ruleset-id: "10202"
+      body:
+        username: $.username
+        password: $.password
+        type: $.type
+
+    # User Update - Admin only
+    "[/plt/web/v1/user:PUT]":
+      roles: ["ROLE_ADMIN"]
+      ruleset-name: "plt-user-update"
+      ruleset-id: "10203"
+      body:
+        username: $.username
+        email: $.email
+        role: $.role
+
+    # Wildcard path - any user endpoint with PUT
+    "[/plt/web/v1/user/*:PUT]":
+      roles: ["ROLE_ADMIN"]
+      ruleset-name: "plt-user-admin"
+      ruleset-id: "10204"
+      body:
+        username: $.username
+        action: $.action
+
+    # Payment Authorization
+    "[/payments/v1/authorize:POST]":
+      roles: ["ROLE_PAYMENT_ADMIN"]
+      ruleset-name: "payment-authorization"
+      ruleset-id: "10205"
+      body:
+        paymentId: $.paymentId
+        amount: $.amount
+        currency: $.currency
+        beneficiaryIds: $.beneficiaries[*].id
+        beneficiaryAccounts: $.beneficiaries[*].account
+
+    # Report Generation - Admin only
+    "[/reports/v1/generate:POST]":
+      roles: ["ROLE_ADMIN"]
+      ruleset-name: "report-generation"
+      ruleset-id: "10206"
+      body:
+        reportType: $.type
+        startDate: $.dateRange.start
+        endDate: $.dateRange.end
+        departments: $.departments[*]
+
+    # Document Upload
+    "[/documents/v1/upload:POST]":
+      roles: ["ROLE_USER"]
+      ruleset-name: "document-upload"
+      ruleset-id: "10207"
+      body:
+        documentType: $.type
+        fileName: $.name
+        fileSize: $.size
+        tags: $.tags[*]
+
+    # Data Export
+    "[/data/v1/export:POST]":
+      roles: ["ROLE_ANALYST"]
+      ruleset-name: "data-export"
+      ruleset-id: "10208"
+      body:
+        exportType: $.type
+        dateRange: $.range
+        dataCategories: $.categories[*]
+        includeMetadata: $.metadata
+
+    # Configuration Update - Super Admin
+    "[/admin/v1/config:PUT]":
+      roles: ["ROLE_SUPER_ADMIN"]
+      ruleset-name: "admin-config"
+      ruleset-id: "10209"
+      body:
+        configKey: $.key
+        configValue: $.value
+        description: $.description
+

@@ -9,11 +9,10 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"reverseProxy/internal/egress/egressconfig"
+	"reverseProxy/internal/egress/tokenstorage"
 	"strings"
 	"time"
-
-	"reverseProxy/internal/egressconfig"
-	"reverseProxy/internal/tokenstorage"
 )
 
 // TokenResponse represents the OAuth token response

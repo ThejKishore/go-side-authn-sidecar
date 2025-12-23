@@ -2,11 +2,10 @@ package tokenmanager
 
 import (
 	"log"
+	"reverseProxy/internal/egress/egressconfig"
+	"reverseProxy/internal/egress/oauthclient"
 	"sync"
 	"time"
-
-	"reverseProxy/internal/egressconfig"
-	"reverseProxy/internal/oauthclient"
 )
 
 // TokenManager manages token fetching and refreshing for all IDP types

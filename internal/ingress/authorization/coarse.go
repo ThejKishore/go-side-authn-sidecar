@@ -6,16 +6,32 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reverseProxy/internal/ingress/jwtauth"
+	"strings"
 	"time"
-
-	"reverseProxy/internal/jwtauth"
 )
 
 // RequestInfo captures minimal request context sent to validation services
 type RequestInfo struct {
 	Method  string            `json:"method"`
 	Path    string            `json:"path"`
+	FullURL string            `json:"full_url,omitempty"`
 	Headers map[string]string `json:"headers,omitempty"`
+}
+
+// GetHeader retrieves a header value (case-insensitive)
+func (r RequestInfo) GetHeader(key string) string {
+	// Try exact match first
+	if val, ok := r.Headers[key]; ok {
+		return val
+	}
+	// Try case-insensitive match
+	for k, v := range r.Headers {
+		if strings.EqualFold(k, key) {
+			return v
+		}
+	}
+	return ""
 }
 
 // coarsePayload is sent to the coarse validation-url

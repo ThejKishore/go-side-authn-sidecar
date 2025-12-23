@@ -6,8 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-
-	"reverseProxy/internal/jwtauth"
+	"reverseProxy/internal/ingress/jwtauth"
 )
 
 // finePayload is sent to the fine-grain validation-url
@@ -18,8 +17,11 @@ type finePayload struct {
 }
 
 // CheckFineGrainAccess performs fine-grained authorization using config.finegrain-check.
+// It supports multiple fine-grain authorization backends:
+// - Legacy fine-grain validation URL
+// - PlainId FGA (when request includes body data)
 // Returns (allow, reason, error). If section disabled or URL is not set, it returns allow=true.
-func CheckFineGrainAccess(req RequestInfo, p jwtauth.Principal) (bool, string, error) {
+func CheckFineGrainAccess(req RequestInfo, p jwtauth.Principal, bodyData ...map[string]interface{}) (bool, string, error) {
 	c := ConfigOrNil()
 	if c == nil || !c.FineGrain.Enabled || c.FineGrain.ValidationURL == "" {
 		return true, "fine-grain check skipped (no config)", nil
@@ -29,6 +31,13 @@ func CheckFineGrainAccess(req RequestInfo, p jwtauth.Principal) (bool, string, e
 		// By default, if no fine-grain rule matches, allow and proceed
 		return true, "fine-grain check skipped (no matching rule)", nil
 	}
+
+	// If body data is provided, use plainId authorization (preferred for structured data)
+	if len(bodyData) > 0 && bodyData[0] != nil {
+		return CheckPlainIdAccess(req, p, bodyData[0])
+	}
+
+	// Fall back to legacy fine-grain check
 	payload := finePayload{
 		Principal: p,
 		Request:   req,

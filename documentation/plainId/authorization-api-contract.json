@@ -1,0 +1,35 @@
+{
+  "method": "GET",
+  "headers": {
+    "x-request-id": "8CDAC3e6r4D252ABE60EFD7A31AFEEBA",
+    "Authorization": "Bearer eyJhbG...lXvZQ"
+  },
+  "uri": {
+    "schema": "https",
+    "authority": {
+      "param1": "val1",
+      "param2": "val2"
+    },
+    "path": [
+      "/portal/api/v1/profile/P4",
+      "portal",
+      "api",
+      "v1",
+      "profile",
+      "P4"
+    ],
+    "query": {
+      "details": true,
+      "type": 2
+    }
+  },
+  "body": {
+    "paramA": "value",
+    "paramB": "value"
+  },
+  "meta": {
+    "runtimeFineTune": {
+      "combinedMultiValue": false
+    }
+  }
+}

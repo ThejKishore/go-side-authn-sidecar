@@ -1,16 +1,15 @@
 package proxyhandler
 
 import (
-    "crypto/rand"
-    "crypto/rsa"
-    "net/http/httptest"
-    "testing"
-    "time"
+	"crypto/rand"
+	"crypto/rsa"
+	"net/http/httptest"
+	"reverseProxy/internal/ingress/jwtauth"
+	"testing"
+	"time"
 
-    "github.com/gofiber/fiber/v3"
-    "github.com/golang-jwt/jwt/v5"
-
-    "reverseProxy/internal/jwtauth"
+	"github.com/gofiber/fiber/v3"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func makeRSAToken(t *testing.T, kid string, priv *rsa.PrivateKey, claims jwt.MapClaims) string {
