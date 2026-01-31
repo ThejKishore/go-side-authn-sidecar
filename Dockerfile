@@ -19,11 +19,11 @@ RUN go build -o main ./cmd/reverse-proxy
 # Step 2: Final stage (small image)
 FROM alpine:latest
 
-# Install PostgreSQL client (optional if you want to run DB operations from within the container)
-RUN apk --no-cache add ca-certificates
-
 # Set the Current Working Directory inside the container
 WORKDIR /root/
+
+# Copy pre-downloaded CA certificates instead of installing via apk
+COPY certs/etc/ssl/certs /etc/ssl/certs/
 
 # Copy the pre-built binary file from the build stage
 COPY --from=build /app/main .
